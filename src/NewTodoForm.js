@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { Alert, Button, Form, FormGroup, InputGroup, InputGroupAddon, InputGroupText, Input, Label } from 'reactstrap';
 import './NewTodoForm.css';
 
-const NewTodoForm = () => {
+const NewTodoForm = ({ addTodo }) => {
 	const INITIAL_STATE = {
 		itemName    : '',
 		description : '',
@@ -11,7 +10,6 @@ const NewTodoForm = () => {
 	};
 	const [ formData, setFormData ] = useState(INITIAL_STATE);
 	const [ errorMessages, setErrorMessages ] = useState(false);
-	const dispatch = useDispatch();
 
 	// https://thewebdev.info/2020/08/01/react-bootstrap%E2%80%8A-%E2%80%8Acheckbox-and-radio-buttons/
 	const [ checked, setChecked ] = useState(false);
@@ -32,20 +30,14 @@ const NewTodoForm = () => {
 		}
 		else {
 			setErrorMessages(false);
-			dispatch({
-				type        : 'ADD_TODO',
-				itemName    : formData.itemName,
-				description : formData.description,
-				importance  : formData.importance,
-				isCompleted : checked
-			});
+			addTodo({ ...formData, isCompleted: checked });
 			setFormData(INITIAL_STATE);
 			setChecked(false);
 		}
 	};
 	return (
 		<Form className="NewTodoForm" onSubmit={handleSubmit}>
-			<h3>New To-Do Item</h3>
+			{/* <h3>New To-Do Item</h3> */}
 			{errorMessages && <Alert color="danger">The Item Name field cannot be blank.</Alert>}
 			<InputGroup className="NewTodoForm-InputGroup">
 				<InputGroupAddon addonType="prepend">

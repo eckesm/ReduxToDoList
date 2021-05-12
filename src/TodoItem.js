@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import {
 	Alert,
 	ListGroup,
@@ -14,21 +13,22 @@ import {
 } from 'reactstrap';
 import './TodoItem.css';
 
-const TodoItem = ({ id, itemName, description, importance, isCompleted }) => {
+const TodoItem = ({ id, itemName, description, importance, isCompleted, updateTodo, deleteTodo }) => {
 	const INITIAL_STATE = {
 		itemName,
 		description,
 		importance
 	};
 	const [ formData, setFormData ] = useState(INITIAL_STATE);
+	const [ touched, setTouched ] = useState(false);
 	const [ editingTitle, setEditingTitle ] = useState(false);
 	const [ errorMessages, setErrorMessages ] = useState(false);
-	const dispatch = useDispatch();
 
 	// https://thewebdev.info/2020/08/01/react-bootstrap%E2%80%8A-%E2%80%8Acheckbox-and-radio-buttons/
 	const [ checked, setChecked ] = useState(isCompleted);
 
 	const handleChange = e => {
+		setTouched(true);
 		const { name, value } = e.target;
 		setFormData(data => ({
 			...data,
@@ -42,24 +42,21 @@ const TodoItem = ({ id, itemName, description, importance, isCompleted }) => {
 		}
 		else {
 			setErrorMessages(false);
-			dispatch({
-				type        : 'UPDATE_TODO',
-				id          : id,
-				itemName    : formData.itemName,
-				description : formData.description,
-				importance  : formData.importance,
-				isCompleted : checked
-			});
+			updateTodo({ ...formData, id, isCompleted: checked });
+			setEditingTitle(false);
+			setTouched(false);
 		}
 	};
 	const handleDelete = e => {
 		e.preventDefault();
 		setErrorMessages(false);
-		dispatch({
-			type : 'DELETE_TODO',
-			id   : id
-		});
+		deleteTodo();
 	};
+
+	const checkToggle=e=>{
+		setChecked(e.currentTarget.checked)
+		setTouched(true)
+	}
 
 	return (
 		<div className="TodoItem">
@@ -112,25 +109,31 @@ const TodoItem = ({ id, itemName, description, importance, isCompleted }) => {
 						<option>Urgent</option>
 					</Input>
 				</InputGroup>
-				<div className="TodoItem-ButtonsDiv">
+				<div className="TodoItem-ButtonsCompleteDiv">
 					<FormGroup className="TodoItem-Complete" check>
 						<Label check>
 							<Input
 								type="checkbox"
 								name="isCompleted"
 								id="isCompleted"
-								onChange={e => setChecked(e.currentTarget.checked)}
+								// onChange={e => setChecked(e.currentTarget.checked)}
+								onChange={checkToggle}
 								checked={checked}
 							/>{' '}
 							Completed?
 						</Label>
 					</FormGroup>
-					<Button className="TodoItem-Buttons" onClick={handleUpdate}>
-						Update
-					</Button>
-					<Button className="TodoItem-Buttons" color="danger" onClick={handleDelete}>
-						Delete
-					</Button>
+
+					<div>
+						{touched && (
+							<Button className="TodoItem-Buttons" onClick={handleUpdate}>
+								Update
+							</Button>
+						)}
+						<Button className="TodoItem-Buttons" color="danger" onClick={handleDelete}>
+							Delete
+						</Button>
+					</div>
 				</div>
 			</ListGroup>
 		</div>

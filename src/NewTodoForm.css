@@ -1,11 +1,14 @@
 .NewTodoForm {
+	background-color:rgb(200, 230, 230);
 	width: fit-content;
 	margin-top: 25px;
 	margin-bottom: 25px;
 	margin-left: auto;
 	margin-right: auto;
 	padding: 10px;
-    border: 1px solid black
+    border: 1px solid black;
+	border-radius: 2%;
+	box-shadow: 10px 10px cadetblue;
 }
 .NewTodoForm-InputGroup {
 	text-align: left;

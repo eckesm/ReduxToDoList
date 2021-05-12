@@ -28,28 +28,21 @@ function rootReducer(state = INITIAL_STATE, action) {
 				todos : [
 					...state.todos,
 					{
-						id          : uuid(),
-						itemName    : action.itemName,
-						description : action.description,
-						importance  : action.importance,
-						isCompleted : action.isCompleted
+						// id          : uuid(),
+						// itemName    : action.itemName,
+						// description : action.description,
+						// importance  : action.importance,
+						// isCompleted : action.isCompleted
+						...action.todo,
+						id : uuid()
 					}
 				]
 			};
 		case 'UPDATE_TODO':
-			const filteredTodos = state.todos.filter(todo => todo.id !== action.id);
+			const filteredTodos = state.todos.filter(todo => todo.id !== action.todo.id);
 			return {
 				...state,
-				todos : [
-					...filteredTodos,
-					{
-						id          : uuid(),
-						itemName    : action.itemName,
-						description : action.description,
-						importance  : action.importance,
-						isCompleted : action.isCompleted
-					}
-				]
+				todos : [ ...filteredTodos, action.todo ]
 			};
 		case 'DELETE_TODO':
 			return {
