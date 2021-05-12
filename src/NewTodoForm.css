@@ -1,0 +1,13 @@
+.NewTodoForm {
+	width: fit-content;
+	margin-top: 25px;
+	margin-bottom: 25px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 10px;
+    border: 1px solid black
+}
+.NewTodoForm-InputGroup {
+	text-align: left;
+	margin: 5px;
+}
